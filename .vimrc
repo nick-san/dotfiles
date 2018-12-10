@@ -1,6 +1,8 @@
 "シンタックスハイライトをオンにする
 syntax on
-"カラースキームをmolokaiにする（.gvimrcに記述したが動かなかったのでここに）
+
+"カラースキーム（.gvimrcに記述したが動かなかったのでここに）
+""Github = "https://github.com/tomasr/molokai"
 colorscheme molokai
 set t_Co=256
 
