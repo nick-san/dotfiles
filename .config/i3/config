@@ -26,7 +26,7 @@ hide_edge_borders both
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
-exec --no-startup-id "picom --vsync"
+exec --no-startup-id compton
 
 # start a terminal
 bindsym $mod+Return exec terminator
@@ -42,7 +42,7 @@ bindsym button2 kill
 # installed.
 #bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
-bindsym $mod+d exec --no-startup-id rofi -show drun
+bindsym $mod+d exec --no-startup-id rofi -show drun -icon-theme "Papirus" -show-icons
 
 # change focus
 bindsym $mod+j focus left
@@ -233,6 +233,7 @@ exec --no-startup-id "feh --bg-scale $HOME/.config/i3/wallpaper.jpg"
 exec --no-startup-id tlp start
 exec --no-startup-id pasystray
 exec --no-startup-id slack -u
+exec --no-startup-id blueman-applet
 
 #exec --no-startup-id "sleep 2s && kalu"
 
