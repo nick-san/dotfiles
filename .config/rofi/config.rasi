@@ -1,0 +1,14 @@
+//@theme "/usr/share/rofi/themes/Arc-Dark.rasi"
+
+configuration {
+  modi: "window,drun,system:~/.config/rofi/rofi_system.sh";
+  sidebar-mode:  true;
+  hide-scrollbar: true;
+  kb-cancel: "Escape,Control+bracketleft";
+  kb-mode-previous: "Alt+u";
+  kb-mode-next: "Alt+i";
+  font: "Open Sans 12";
+}
+
+//@theme "/usr/share/rofi/themes/Arc-Dark.rasi"
+@theme "/usr/share/rofi/themes/Monokai.rasi"
