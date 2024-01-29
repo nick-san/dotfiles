@@ -26,7 +26,6 @@ hide_edge_borders both
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
-exec --no-startup-id compton
 
 # start a terminal
 bindsym $mod+Return exec terminator
@@ -242,6 +241,7 @@ exec --no-startup-id slack -u
 exec --no-startup-id discord --start-minimized
 exec --no-startup-id blueman-applet
 exec --no-startup-id "flameshot"
+exec --no-startup-id compiz -b
 
 #exec --no-startup-id "sleep 2s && kalu"
 
