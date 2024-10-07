@@ -1,7 +1,7 @@
 //@theme "/usr/share/rofi/themes/Arc-Dark.rasi"
 
 configuration {
-  modi: "window,drun,system:~/.config/rofi/rofi_system.sh";
+  modi: "window,drun,clipboard:greenclip print,system:~/.config/rofi/rofi_system.sh";
   sidebar-mode:  true;
   hide-scrollbar: true;
   kb-cancel: "Escape,Control+bracketleft";
