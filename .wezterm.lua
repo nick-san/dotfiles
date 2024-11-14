@@ -6,14 +6,14 @@ if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 
-config.enable_wayland = false
+config.enable_wayland = true
 
 config.use_ime = true
 
 --- みため
 config.color_scheme = 'Monokai Pro Ristretto (Goph)'
 
-config.window_background_opacity = 0.8
+config.window_background_opacity = 0.7
 
 -- Fonts
 config.font_size = 18

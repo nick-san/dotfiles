@@ -1,0 +1,349 @@
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+
+set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
+exec rm -f $WOBSOCK && mkfifo $WOBSOCK && tail -f $WOBSOCK | wob
+
+input * {
+    xkb_layout "jp"
+}
+
+set $mod Mod4
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+# font pango:NotoSans-Condensed 10
+font pango:OpenSans-Regular 10
+
+# for_window [all] title_window_icon padding 1px
+# for_window [app_id=".*"] border csd
+
+# thin borders
+hide_edge_borders both
+
+# Before i3 v4.8, we used to recommend this one as the default:
+# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+# The font above is very space-efficient, that is, it looks good, sharp and
+# clear in small sizes. However, its unicode glyph coverage is limited, the old
+# X core fonts rendering does not support right-to-left and this being a bitmap
+# font, it doesn’t scale on retina/hidpi displays.
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+#bindsym $mod+Return exec terminator
+bindsym $mod+Return exec wezterm
+
+# kill focused window
+bindsym $mod+Shift+q kill
+bindsym button2 kill
+
+# start dmenu (a program launcher)
+# bindsym $mod+d exec dmenu_run
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+#bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+
+bindsym $mod+d exec --no-startup-id rofi -show drun -icon-theme "Papirus" -show-icons
+
+# change focus
+bindsym $mod+j focus left
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+semicolon focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+semicolon move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+Shift+s layout stacking
+bindsym $mod+Shift+w layout tabbed
+bindsym $mod+Shift+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+# switch to workspace
+bindsym $mod+u workspace prev
+bindsym $mod+i workspace next
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+z exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# lock
+bindsym $mod+Shift+x exec swaylock --color 475263
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+    # These bindings trigger as soon as you enter the resize mode
+
+    # Pressing left will shrink the window’s width.
+    # Pressing right will grow the window’s width.
+    # Pressing up will shrink the window’s height.
+    # Pressing down will grow the window’s height.
+    bindsym j resize shrink width 10 px or 10 ppt
+    bindsym k resize grow height 10 px or 10 ppt
+    bindsym l resize shrink height 10 px or 10 ppt
+    bindsym semicolon resize grow width 10 px or 10 ppt
+
+    # same bindings, but for the arrow keys
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+set $bg-color            #2f343f
+set $inactive-bg-color   #2f343f
+set $text-color          #f3f4f5
+set $inactive-text-color #676e7d
+set $urgent-bg-color     #e53935
+set $indicator-color     #a0a0a0
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+    #status_command i3status
+    #status_command waybar 
+    swaybar_command waybar
+    # font pango:monospace 12
+    font pango:NotoSans-Condensed 12
+# 
+# colors {
+#   background $bg-color
+#   statusline $yellow-color
+#   separator $contrast-color
+#   focused_workspace  $contrast-color $bg-color $yellow-color
+#   active_workspace   $contrast-color $contrast-color $contrast-color
+#   inactive_workspace $contrast-color $bg-color $fg-color
+#   urgent_workspace   $red-color $bg-color $contrast-color
+# }
+
+}
+
+# floating windows
+for_window [class="Pavucontrol"] floating enable
+for_window [class="Kalu"] floating enable
+
+## Multimedia Keys
+
+## volume
+#bindsym XF86AudioRaiseVolume exec amixer -D pulse sset Master 5%+ && pkill -RTMIN+1 i3blocks
+#bindsym XF86AudioLowerVolume exec amixer -D pulse sset Master 5%- && pkill -RTMIN+1 i3blocks
+#
+## granular volume control
+#bindsym $mod+XF86AudioRaiseVolume exec amixer -D pulse sset Master 1%+ && pkill -RTMIN+1 i3blocks
+#bindsym $mod+XF86AudioLowerVolume exec amixer -D pulse sset Master 1%- && pkill -RTMIN+1 i3blocks
+#
+## mute
+#bindsym XF86AudioMute exec amixer sset Master toggle && killall -USR1 i3blocks
+
+#bindsym XF86AudioPlay exec playerctl play
+#bindsym XF86AudioPause exec playerctl pause
+#bindsym XF86AudioNext exec playerctl next
+#bindsym XF86AudioPrev exec playerctl previous
+
+bindsym XF86AudioPlay exec mocp --toggle-pause
+bindsym XF86AudioPause exec mocp --toggle-pause
+bindsym XF86AudioStop exec mocp --togle-pause
+bindsym XF86AudioNext exec mocp --next
+bindsym XF86AudioPrev exec mocp --previous
+
+bindsym $mod+F5 exec mocp --toggle-pause
+bindsym $mod+F6 exec mocp --stop
+bindsym $mod+F7 exec mocp --previous
+bindsym $mod+F8 exec mocp --next
+
+bindsym ctrl+F12 exec pavucontrol 
+
+# App shortcuts
+bindsym $mod+n exec "/usr/bin/nemo"
+bindsym $mod+Shift+n exec swaync-client -t -sw
+
+# Redirect sound to headphones
+bindsym $mod+m exec "/usr/local/bin/switch-audio-port"
+
+# Autostart apps
+# exec --no-startup-id nm-applet
+# exec --no-startup-id "feh --bg-scale $HOME/.config/i3/wallpaper.jpg"
+exec --no-startup-id tlp start
+exec --no-startup-id slack -u
+exec --no-startup-id discord --start-minimized
+exec --no-startup-id blueman-applet
+exec --no-startup-id "flameshot"
+exec --no-startup-id greenclip daemon>/dev/null
+exec swaync
+# exec --no-startup-id compiz -b
+# exec --no-startup-id mako
+
+#exec --no-startup-id "sleep 2s && kalu"
+
+#bindsym XF86MonBrightnessUp exec light -A 10
+bindsym XF86MonBrightnessUp exec "brightnessctl set 10+"
+#bindsym XF86MonBrightnessDown exec light -U 10
+bindsym XF86MonBrightnessDown exec "brightnessctl set 10-"
+
+
+#bindsym $mod+Shift+i exec --no-startup-id "flameshot gui"
+bindsym $mod+Shift+i exec grim -g "$(slurp)" - | wl-copy
+
+# Review the lines below and append to ~/.config/i3/config
+
+## Volume control
+
+# Path to volume control, without trailing slash
+set $volumepath ~/i3-volume
+
+# Command for the status line
+#   ie: i3blocks, i3status
+# set $statuscmd i3status
+set $statuscmd waybar
+
+# Signal used to update the status line
+#   i3blocks uses SIGRTMIN+10 by default
+#   i3status uses SIGUSR1 by default
+set $statussig SIGUSR1
+
+# Amount to increase/decrease volume as a percentage
+set $volumestep 5
+
+# pulseaudio-utils settings
+#
+# Symbolic name for sink (numeric index not supported)
+#   Recommended: comment out this setting and omit the -s option to use default sink
+#   List sink names: pacmd list-sinks | awk -F "[<>]" '/^\s+name: <.*>/{print $2}'
+#set $sinkname alsa_output.pci-0000_00_1b.0.analog-stereo
+
+# Using pulseaudio-utils (append "-s $sinkname" without quotes to override default sink)
+# bindsym XF86AudioRaiseVolume exec --no-startup-id $volumepath/volume -n -t $statuscmd -u $statussig up $volumestep
+# bindsym XF86AudioLowerVolume exec --no-startup-id $volumepath/volume -n -t $statuscmd -u $statussig down $volumestep
+# bindsym XF86AudioMute        exec --no-startup-id $volumepath/volume -n -t $statuscmd -u $statussig mute
+
+# # 音量を上げる
+# bindsym XF86AudioRaiseVolume exec pamixer -i 5 && notify-send -u low -t 800 "Volume: $(pamixer --get-volume)%"
+# 
+# # 音量を下げる
+# bindsym XF86AudioLowerVolume exec pamixer -d 5 && notify-send -u low -t 800 "Volume: $(pamixer --get-volume)%"
+# 
+# # ミュート切り替え
+# bindsym XF86AudioMute exec pamixer -t && notify-send -u low -t 800 "Mute: $(pamixer --get-mute)"
+
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% && pactl get-sink-volume @DEFAULT_SINK@ | awk 'NR==1{print substr($5,1,length($5)-1)}' > $WOBSOCK
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% && pactl get-sink-volume @DEFAULT_SINK@ | awk 'NR==1{print substr($5,1,length($5)-1)}' > $WOBSOCK
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle && ( [ "$(pactl get-sink-mute @DEFAULT_SINK@)" = "Mute: yes" ] && echo 0 > $WOBSOCK ) || pactl get-sink-volume @DEFAULT_SINK@ | awk 'NR==1{print substr($5,1,length($5)-1)}' > $WOBSOCK
+
+
+# Inner gaps for all windows: space between two adjacent windows (or split containers).
+gaps inner 5px
+
+# Outer gaps for all windows: space along the screen edges.
+gaps horizontal 5px
+
+# Enabling “Smart Gaps” means no gaps will be shown when there is
+# precisely one window or split container on the workspace.
+#
+# inverse_outer only enables outer gaps when there is exactly one
+# window or split container on the workspace.
+smart_gaps on
+
+# ------------------------- COLORS  -------------------------
+set $fg-color #fdfff1
+set $bg-color #272821
+set $contrast-color #3b3c35
+set $red-color #f82570
+set $green-color #a6e12d
+set $yellow-color #e4db73
+set $orange-color #fc961f
+set $purple-color #ae81ff
+
+# class                     border  	       backgr. 	    text    	    indicator 	    child_border
+client.focused          	$contrast-color    $bg-color	$yellow-color	$contrast-color	$contrast-color
+client.focused_inactive     $bg-color		   $bg-color	$yellow-color	$bg-color	    $bg-color
+client.unfocused          	$bg-color          $bg-color	$contrast-color	$bg-color	    $bg-color
+client.urgent         		$red-color		   $bg-color	$red-color	    $red-color      $red-color
+client.placeholder          $bg-color		   $bg-color	$yellow-color	$bg-color	    $bg-color
+client.background       	$fg-color
+
+output "*" background ~/.config/i3/wallpaper.jpg fill
+
+exec "~/.config/sway/fcitx.sh"
+exec "wob"
+exec "python3 /usr/share/sway/contrib/inactive-windows-transparency.py --opacity 0.75"
+
+# SwayFX Config
+
+blur enable
+blur_radius 2
+corner_radius 10
+shadows enable
+default_dim_inactive 0.2
+
