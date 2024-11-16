@@ -16,7 +16,7 @@ config.color_scheme = 'Monokai Pro Ristretto (Goph)'
 config.window_background_opacity = 0.7
 
 -- Fonts
-config.font_size = 18
+config.font_size = 12
 
 config.font = wezterm.font("0xProto Nerd Font", {style="Normal"})
 
