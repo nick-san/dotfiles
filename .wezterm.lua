@@ -15,6 +15,8 @@ config.color_scheme = 'Monokai Pro Ristretto (Goph)'
 
 config.window_background_opacity = 0.7
 
+config.hide_mouse_cursor_when_typing = false
+
 -- Fonts
 config.font_size = 12
 
