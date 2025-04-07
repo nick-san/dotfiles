@@ -1,84 +1,65 @@
-# Default config for sway
 #
-# Copy this to ~/.config/sway/config and edit it to your liking.
+## Set environment variables
 #
-# Read `man 5 sway` for a complete reference.
-
-### Variables
-#
-# Logo key. Use Mod1 for Alt.
 set $mod Mod4
-# Home row direction keys, like vim
+
 set $left h
 set $down j
 set $up k
 set $right l
-# Your preferred terminal emulator
+
 set $term wezterm
-# Your preferred application launcher
-# Note: pass the final command to swaymsg so that the resulting window can be opened
-# on the original workspace that the command was run on.
-#set $menu dmenu_path | dmenu | xargs swaymsg exec --
-# it is set in config.d/50-openSUSE.conf
+set $menu wofi --show drun -I
+set $toggle_notification "swaync-client -t -sw"
 
-### Output configuration
-#
-# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-# output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
-output * bg /home/rlysleepynick/Pictures/mahoromatic-mahoro1.jpg fill
-#
-# Example configuration:
-#
-#   output HDMI-A-1 resolution 1920x1080 position 1920,0
-#
-# You can get the names of your outputs by running: swaymsg -t get_outputs
-
-### Idle configuration
-#
-# Example configuration:
-#
-# exec swayidle -w \
-#          timeout 300 'swaylock -f -c 000000' \
-#          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-#          before-sleep 'swaylock -f -c 000000'
-#
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
-
-### Input configuration
-#
-# Example configuration:
-#
-#   input "2:14:SynPS/2_Synaptics_TouchPad" {
-#       dwt enabled
-#       tap enabled
-#       natural_scroll enabled
-#       middle_emulation enabled
-#   }
-#
-# You can get the names of your inputs by running: swaymsg -t get_inputs
-# Read `man 5 sway-input` for more information about this section.
-
+set $wob wob --config /etc/sway/wob/wob.ini
 
 #
-# Status Bar:
+## Status bar and wallpaper
 #
-# Read `man 5 sway-bar` for more information about this section.
-# it is set in config.d/50-openSUSE.conf
-#bar {
-#    position top
-#
-#    # When the status_command prints a new line to stdout, swaybar updates.
-#    # The default just shows the current date and time.
-#    status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
-#
-#    colors {
-#        statusline #ffffff
-#        background #323232
-#        inactive_workspace #32323200 #32323200 #5c5c5c
-#    }
-#}
+bar {
+    swaybar_command waybar
+}
 
-# include /etc/sway/config.d/*.conf
+output * bg ~/Pictures/wallpapers/mahoromatic-mahoro1.jpg fill
+
+#
+## Window theming
+#
+set $background-darker rgba(30, 31, 41, 230)
+set $background #282a36
+set $selection #44475a
+set $foreground #f8f8f2
+set $comment #6272a4
+set $cyan #8be9fd
+set $green #50fa7b
+set $orange #ffb86c
+set $pink #ff79c6
+set $purple #bd93f9
+set $red #ff5555
+set $yellow #f1fa8c
+
+client.unfocused $background $background $comment
+client.focused_inactive $background $background $comment
+client.focused $purple $purple $foreground
+
+default_border pixel 1
+gaps inner 10
+
+#
+## Others
+#
+exec_always {
+    systemctl --user import-environment
+    gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+    gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
+    gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+    test -e $SWAYSOCK.wob || mkfifo $SWAYSOCK.wob
+    tail -f $SWAYSOCK.wob | $wob
+    swaync --style /etc/sway/swaync/style.css --config /etc/sway/swaync/config.json
+}
+
+exec /usr/libexec/polkit-gnome-authentication-agent-1
+
 include ~/.config/sway/config.d/*
