@@ -1,45 +1,77 @@
--- シンタックスハイライトをオンにする
-vim.cmd('syntax on')
+-- 1. Neovimの基本設定 (エラー回避のため最初に設定)
+----------------------------------------------------------------------
 
--- カラースキーム
--- vim.cmd('colorscheme molokai')
-vim.o.termguicolors = true -- これで t_Co=256 は不要
+-- 文字コード
+vim.opt.fenc = 'utf-8'
+vim.opt.fileencodings = 'utf-8,cp932,euc-jp,sjis'
 
--- 基本設定
-vim.o.fileencoding = 'utf-8'
-vim.o.backup = false
-vim.o.swapfile = false
-vim.o.autoread = true
-vim.o.hidden = true
-vim.o.showcmd = true
+-- ファイルの挙動
+vim.opt.backup = false
+vim.opt.swapfile = false
+vim.opt.autoread = true
+vim.opt.hidden = true
+vim.opt.clipboard = 'unnamed,unnamedplus'
 
--- 見た目
-vim.wo.number = true
-vim.wo.cursorline = true
-vim.wo.cursorcolumn = true
-vim.o.virtualedit = 'onemore'
-vim.o.smartindent = true
-vim.o.showmatch = true
-vim.o.laststatus = 2
-vim.o.wildmode = 'list:longest'
+-- UI/見た目 (グローバルな設定)
+vim.opt.showcmd = true
+vim.opt.laststatus = 2
+vim.opt.virtualedit = 'onemore'
+vim.opt.smartindent = true
+vim.opt.showmatch = true
+vim.opt.wildmode = 'list:longest'
+-- vim.cmd('syntax enable')
 
--- 折り返し時の移動
-vim.api.nvim_set_keymap('n', 'j', 'gj', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', 'k', 'gk', { noremap = true, silent = true })
-
--- タブ系
-vim.o.list = true
-vim.o.listchars = 'tab:▸-'
-vim.o.expandtab = true
-vim.o.tabstop = 2
-vim.o.shiftwidth = 2
+-- Tab
+vim.opt.list = true
+vim.opt.listchars = 'tab:▸-'
+vim.opt.expandtab = true
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
 
 -- 検索
-vim.o.ignorecase = true
-vim.o.smartcase = true
-vim.o.incsearch = true
-vim.o.wrapscan = true
-vim.o.hlsearch = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.incsearch = true
+vim.opt.wrapscan = true
+vim.opt.hlsearch = true
 
--- ESC連打でハイライト解除
-vim.api.nvim_set_keymap('n', '<Esc><Esc>', ':nohlsearch<CR><Esc>', { noremap = true, silent = true })
+-- キーマップ
+vim.keymap.set('n', '<Esc><Esc>', ':nohlsearch<CR><Esc>', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-n>', ':Neotree filesystem reveal left<CR>')
+
+-- 2. ウィンドウ毎の設定 (autocmdで安全に適用)
+----------------------------------------------------------------------
+-- lazy.nvimのUIなど、特殊なバッファでエラーを起こさないようにautocmdを使う
+local visual_settings_group = vim.api.nvim_create_augroup('MyVisualSettings', { clear = true })
+vim.api.nvim_create_autocmd('BufEnter', {
+  group = visual_settings_group,
+  pattern = '*', -- すべてのファイルタイプで実行
+  callback = function()
+    -- 編集するファイルにのみ適用したいオプション
+    vim.opt_local.number = true
+    vim.opt_local.cursorline = true
+    vim.opt_local.cursorcolumn = true
+  end,
+})
+
+-- 3. プラグインマネージャー (lazy.nvim) の設定
+----------------------------------------------------------------------
+vim.loader.enable()
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable",
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup("plugins")
+
+-- 4. 配色設定 (プラグイン読み込み後に設定)
+----------------------------------------------------------------------
+vim.cmd('colorscheme molokai')
