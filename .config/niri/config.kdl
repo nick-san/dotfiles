@@ -264,9 +264,10 @@ layout {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
 spawn-at-startup "xwayland-satellite"
-spawn-at-startup "swaybg" "-i" "~/Pictures/wallpapers/mahoromatic-mahoro1.jpg" "-m" "fill"
 spawn-at-startup "swaync"
 spawn-at-startup "swayosd-server"
+spawn-at-startup "~/.config/niri/swww.sh"
+//spawn-at-startup "swaybg" "-i" "~/Pictures/wallpapers/mahoro-mahoromatic.jpg" "-m" "fill"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
