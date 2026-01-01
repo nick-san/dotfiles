@@ -1,0 +1,19 @@
+[mgr]
+show_hidden = true
+edit = { exec = "nvim", block = true, confirm = true }
+[open]
+prepend_rules = [
+    # 上で作った "play" (または "vlc") を指定
+    { mime = "video/*", use = "vlc" }
+]
+
+[opener]
+# mpvの場合
+play = [
+    { run = 'mpv "$@"', orphan = true, for = "unix" }
+]
+
+# VLCの場合 (使いたい方を選んで記述してください)
+vlc = [
+    { run = 'vlc "$@"', orphan = true, for = "unix" }
+]
